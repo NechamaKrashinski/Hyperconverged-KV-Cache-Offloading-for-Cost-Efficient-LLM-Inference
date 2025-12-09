@@ -1,46 +1,83 @@
+---
+
 # 🚀 Hyper-Converged KV-Cache Offloading for Cost-Efficient LLM Inference
 
-## 📜 Description
+## 📖 Overview
 
-This project focused on **System Architecture and Performance Engineering** for Large Language Model (LLM) inference, specifically addressing the costly memory constraints of GPU High Bandwidth Memory (HBM). We designed, provisioned, and benchmarked a **Hyper-Converged KV-Cache Offloading pipeline** utilizing vLLM, LMCache, and the **KVRocks** key-value store. The core goal was to establish the optimal technical stack and performance baselines necessary to guide next-generation deployment strategies for high-throughput architectures like **Dynamo** and **LLMD**.
+This project explores **System Architecture and Performance Engineering** for Large Language Model (LLM) inference, addressing the high cost and limited capacity of GPU High Bandwidth Memory (HBM). It delivers a **Hyper-Converged KV-Cache Offloading pipeline** leveraging **vLLM**, **LMCache**, and **KVRocks** to redirect KV-cache data from GPU memory to high-throughput SSDs, establishing performance baselines and insights for high-throughput architectures.
+
+---
+
+## 🎯 Project Goals
+
+* Design and implement a robust PoC for LLM inference offloading.
+* Evaluate performance and cost-efficiency of two KV-Cache serving architectures:
+
+  1. **Baseline:** DRAM-bound KV-Cache serving.
+  2. **Proposed:** SSD-based KV-Cache Offloading via Hyper-Converged Architecture.
+
+---
 
 ## 🛠️ Technology Stack & Environment
 
-| Component | Purpose | Details |
-| :--- | :--- | :--- |
-| **LLM Framework** | vLLM (Continuous Batching) | Used for high-throughput inference serving. |
-| **Cache Offloading** | LMCache + **KVRocks** | LMCache managed the offloading logic; KVRocks provided robust, fast key-value persistence. |
-| **Hardware** | NVIDIA GPUs (L4/A100), Dual NVMe SSDs | Target environment included setting up **RAID0** arrays on NVMe SSDs for maximized I/O bandwidth. |
-| **Tools & Optimization** | Python Benchmarking (Custom Script), RocksDB | Custom Python script enhanced for accuracy; RocksDB/vLLM flags tuned for $1.5\times$ improvement. |
+| Component                | Purpose                   | Details                                         |
+| :----------------------- | :------------------------ | :---------------------------------------------- |
+| **LLM Framework**        | High-throughput inference | vLLM (Continuous Batching)                      |
+| **Cache Offloading**     | KV flow management        | LMCache + **KVRocks**                           |
+| **Hardware**             | Compute & storage         | NVIDIA L4/A100 GPUs, Dual NVMe SSDs (**RAID0**) |
+| **Tools & Optimization** | Benchmarking & tuning     | RocksDB, vLLM flags tuning                      |
 
 ---
 
-## 🎯 Key Achievements & Impact
+## ⚡ Key Achievements (Highlighting KPIs)
 
-| Achievement | Technical Detail | Performance KPI |
-| :--- | :--- | :--- |
-| **Infrastructure Foundation** | Provisioned the robust, Hyper-Converged **KVRocks** setup and built the high-throughput **RAID0** array. | Provided the stability required for **Dynamo and LLMD deployments**. |
-| **Pipeline Stabilization** | Executed and stabilized the seamless GPU HBM $\rightarrow$ SSD KV-cache offloading pipeline integration. | Enabled consistent execution across the full technical stack. |
-| **System Optimization** | Optimized RocksDB parameters and **vLLM flags** via **System-Level Tuning**. | Achieved an overall **$\mathbf{1.5\times}$ improvement in TPS/RPS** of the KVrocks pipeline. |
-| **Performance Baseline** | Conducted full benchmarking comparing the final **KVRocks** (SSD) configuration against DRAM caching. | Identified DRAM as approximately **$\mathbf{2.5\times}$ faster in TPS/RPS**, providing clear cost-performance trade-offs. |
-
----
-
-## 📝 Detailed Responsibilities (8 Points)
-
-1.  **Provisioned the foundational, robust Hyper-Converged KVRocks infrastructure** by building a high-throughput **RAID0** array. This configuration **provided the stability required for Dynamo and LLMD deployments**.
-2.  **Executed and stabilized** the seamless GPU HBM $\rightarrow$ SSD KV-cache offloading pipeline, integrating vLLM, LMCache, and KVRocks.
-3.  **Enhanced the Python benchmarking script** by implementing timeout exception handling to filter data skew and ensure accurate TPS metrics.
-4.  Optimized core RocksDB parameters (compression, block cache) and vLLM flags through system-level tuning, resulting in an overall **$\mathbf{1.5\times}$ improvement in TPS/RPS**.
-5.  **Calculated precise concurrency limits** by modeling HBM saturation relative to token size, determining the maximum number of parallel clients for the vLLM server.
-6.  **Conducted full benchmarking** of vLLM + **KVRocks** (SSD) vs. DRAM caching, identifying DRAM as approximately **$\mathbf{2.5\times}$ faster in TPS/RPS** than the SSD configuration.
-7.  **Synthesized benchmark data into performance graphs**, identifying network serialization as the dominant bottleneck and providing actionable architectural insights.
-8.  **Established optimal configuration patterns and best practices for the vLLM + LMCache + KVRocks stack, enabling consistent system stability and performance across team deployments.**
+* **Infrastructure Foundation:** Provisioned the robust Hyper-Converged **KVRocks** setup and built the **high-throughput RAID0 NVMe SSD array**. This configuration provided the stability required for **Dynamo and LLMD deployments**.
+* **System Optimization Success:** Optimized core RocksDB parameters and vLLM flags through **system-level tuning**, resulting in an overall **$\mathbf{1.5\times}$ improvement in TPS/RPS**.
+* **Performance Baseline Established:** Conducted benchmarking and quantified DRAM caching as approximately **$\mathbf{2.5\times}$ faster in TPS/RPS** than the SSD configuration, informing cost-performance decisions.
+* **Architectural Insight:** Identified **network serialization** as the dominant system bottleneck, not disk I/O.
+* **Knowledge Transfer:** Established **optimal configuration patterns and best practices** for team deployments.
 
 ---
 
-## 🧠 Conclusion & Future Direction
+📈 Performance Visualization
 
-The project successfully defined the technical limits and opportunities within the Hyper-Converged offloading architecture. The primary architectural insight provided was that **network serialization** remains the dominant bottleneck, guiding future research toward network/communication optimization rather than solely storage tuning.
+Figure 1: DRAM vs KVRocks Initial Benchmark
+Blue line: DRAM | Green/Purple line: KVRocks
+Illustrates the original $\mathbf{2.5\times}$ TPS/RPS difference.
+
+<img width="1544" height="814" alt="image" src="https://github.com/user-attachments/assets/b7d88f94-6840-4c3d-8c1d-835b90b5b3c9" />
+
+Figure 2: KVRocks Optimization (Before vs. After Tuning)
+Baseline (green) vs Tuned (purple)
+Highlights $\mathbf{1.5\times}$ improvement achieved through system-level tuning.
+
+<img width="1544" height="814" alt="image" src="https://github.com/user-attachments/assets/bfe9b687-5c6f-4418-a0f7-ea1fe689d3f2" />
+
+---
+
+## 📝 Detailed Project Contributions (8 Steps)
+
+1. **Provisioned the foundational Hyper-Converged KVRocks infrastructure**, building a high-throughput **RAID0** array for stable deployment.
+2. **Executed and stabilized** the GPU HBM $\rightarrow$ SSD KV-cache offloading pipeline with vLLM, LMCache, and KVRocks.
+3. **Enhanced Python benchmarking scripts** with timeout handling for reliable metrics.
+4. **Optimized RocksDB parameters and vLLM flags**, achieving **$\mathbf{1.5\times}$ TPS/RPS improvement**.
+5. **Modeled HBM saturation** to calculate safe parallelism limits.
+6. **Benchmarked vLLM + KVRocks vs DRAM**, confirming **$\mathbf{2.5\times}$ faster TPS/RPS** for DRAM.
+7. **Synthesized performance results** into actionable insights for architecture decisions.
+8. **Established best practices** and optimal configuration patterns for consistent team deployment.
+
+---
+
+## 📊 Performance Insights
+
+* **Latency & Bottlenecks:** Network serialization dominates over disk I/O.
+* **Chunk Size Trade-off:** Larger cache chunks reduce hit rate (77% $\rightarrow$ 69%), requiring balance.
+* **Baseline Comparison:** DRAM caching outperforms SSD offloading, guiding cost-performance trade-offs.
+
+---
+
+## 🧠 Conclusion
+
+This project establishes a **robust, high-throughput offloading architecture** for LLM inference, identifies system bottlenecks, and provides clear guidance for future performance research and optimization.
 
 ---
