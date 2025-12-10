@@ -42,13 +42,13 @@ This project explores **System Architecture and Performance Engineering** for La
 📈 Performance Visualization
 
 Figure 1: DRAM vs KVRocks Initial Benchmark
-Blue line: DRAM | Green/Purple line: KVRocks
+Blue line: DRAM | Pink line: KVRocks
 Illustrates the original $\mathbf{2.5\times}$ TPS/RPS difference.
 
 <img width="1544" height="814" alt="image" src="https://github.com/user-attachments/assets/b7d88f94-6840-4c3d-8c1d-835b90b5b3c9" />
 
 Figure 2: KVRocks Optimization (Before vs. After Tuning)
-Baseline (green) vs Tuned (purple)
+Purple line: Baseline | vs Pink line: Tuned
 Highlights $\mathbf{1.5\times}$ improvement achieved through system-level tuning.
 
 <img width="1544" height="814" alt="image" src="https://github.com/user-attachments/assets/bfe9b687-5c6f-4418-a0f7-ea1fe689d3f2" />
@@ -81,3 +81,4 @@ Highlights $\mathbf{1.5\times}$ improvement achieved through system-level tuning
 This project establishes a **robust, high-throughput offloading architecture** for LLM inference, identifies system bottlenecks, and provides clear guidance for future performance research and optimization.
 
 ---
+
