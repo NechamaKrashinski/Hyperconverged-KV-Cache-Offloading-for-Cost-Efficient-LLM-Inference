@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Tech Stack](https://img.shields.io/badge/Stack-vLLM%20%7C%20Kvrocks%20%7C%20LMCache-green)]()
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://www.python.org/)
 
 ## 📖 Overview
 
@@ -193,3 +194,4 @@ Questions or collaboration? Feel free to open an issue or reach out!
 * **Pliops** for the mentorship and resources.
 * **KamaTech** for the bootcamp platform.
 * **vLLM**, **LMCache**, and **Kvrocks** communities for their excellent open-source tools.
+
